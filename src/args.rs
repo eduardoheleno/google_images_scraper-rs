@@ -1,3 +1,4 @@
+use std::env;
 use std::process::exit;
 
 pub struct Args {
@@ -6,7 +7,9 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn new(vec_args: Vec<String>) -> Args {
+    pub fn parse() -> Args {
+        let vec_args: Vec<String> = env::args().collect();
+
         let search_parameter = if let Some(search_parameter) = vec_args.get(1) {
             search_parameter.to_string()
         } else {
