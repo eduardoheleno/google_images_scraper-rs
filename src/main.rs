@@ -1,8 +1,7 @@
 mod args;
 mod scraper_engine;
 mod src_parser;
-mod url_downloader;
-mod base64_downloader;
+mod downloaders;
 
 use thirtyfour::prelude::*;
 

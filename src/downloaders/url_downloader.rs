@@ -2,29 +2,19 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::process::exit;
 
-use super::DownloaderTrait;
-use base64::{Engine as _, engine::general_purpose};
+use crate::DownloaderTrait;
 
-pub struct Base64Downloader {
+pub struct UrlDownloader {
     pub src: String,
     pub folder_name: String,
     pub file_name: String
 }
 
-impl DownloaderTrait for Base64Downloader {
+impl DownloaderTrait for UrlDownloader {
     fn download(&self) {
         println!("Downloading from: {}", self.src);
 
-        let image_uri: Vec<&str> = self.src.split(',').collect();
-        let base64_image = if let Some(base64_image) = image_uri.get(1) {
-            base64_image
-        } else {
-            println!("Couldn't find the base64 image.");
-            exit(1);
-        };
-
-        let bytes = general_purpose::STANDARD
-            .decode(base64_image).unwrap();
+        let resp = reqwest::blocking::get(&self.src).unwrap();
 
         let file_extension = self.get_file_extension();
         if file_extension.is_none() {
@@ -36,13 +26,13 @@ impl DownloaderTrait for Base64Downloader {
         let file_path = format!("./{}/{}", self.folder_name, file_name_with_extension);
         let mut file = File::create(file_path).unwrap();
 
-        file.write_all(&bytes).unwrap();
+        file.write_all(&resp.bytes().unwrap()).unwrap();
     }
 
     fn get_file_extension(&self) -> Option<&'static str> {
-        if self.src.contains("data:image/jpeg") || self.src.contains("data:image/jpg") {
+        if self.src.contains(".jpg") || self.src.contains(".jpeg") {
             return Some(".jpg");
-        } else if self.src.contains("data:image/png") {
+        } else if self.src.contains(".png") {
             return Some(".png");
         } else {
             return None;

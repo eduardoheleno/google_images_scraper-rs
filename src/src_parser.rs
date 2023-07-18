@@ -1,5 +1,5 @@
-use super::url_downloader::UrlDownloader;
-use super::base64_downloader::Base64Downloader;
+use super::downloaders::url_downloader::UrlDownloader;
+use super::downloaders::base64_downloader::Base64Downloader;
 use super::DownloaderTrait;
 
 pub struct SrcParser;
