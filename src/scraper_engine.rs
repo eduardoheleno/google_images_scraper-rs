@@ -1,4 +1,4 @@
-use std::{thread, time};
+use std::{thread, time, fs};
 
 use rand::Rng;
 use thirtyfour::prelude::*;
@@ -24,6 +24,8 @@ impl ScraperEngine {
     }
 
     pub async fn run(self) -> WebDriverResult<()> {
+        fs::create_dir(&self.args.folder_name).unwrap();
+
         let mut counter = 0;
         let mut download_limit = DEFAULT_DOWNLOAD_LIMIT;
 
@@ -48,9 +50,16 @@ impl ScraperEngine {
                 continue;
             };
 
+            let alt = img_element.attr("alt").await?.unwrap();
             let src = img_element.attr("src").await?.unwrap();
-            let downloader = SrcParser::parse(src);
-            downloader.download();
+
+            let downloader = SrcParser::parse(src, self.args.folder_name.clone(), alt);
+
+            let handle = thread::spawn(move || {
+                downloader.download();
+            });
+
+            handle.join().unwrap();
 
             counter += 1;
         }

@@ -3,6 +3,7 @@ use std::process::exit;
 
 pub struct Args {
     pub search_parameter: String,
+    pub folder_name: String,
     pub download_limit: Option<i16>
 }
 
@@ -30,6 +31,13 @@ impl Args {
             None
         };
 
-        Args { search_parameter, download_limit }
+        let folder_name = if let Some(folder_name) = vec_args.get(3) {
+            folder_name.to_string()
+        } else {
+            eprintln!("You must insert a folder name.");
+            exit(1);
+        };
+
+        Args { search_parameter, download_limit, folder_name }
     }
 }

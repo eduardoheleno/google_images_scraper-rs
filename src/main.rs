@@ -13,6 +13,7 @@ const WEBDRIVER_HOST: &str = "http://localhost:4444";
 
 pub trait DownloaderTrait {
     fn download(&self);
+    fn get_file_extension(&self) -> Option<&'static str>;
 }
 
 #[tokio::main]
