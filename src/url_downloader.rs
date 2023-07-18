@@ -18,7 +18,7 @@ impl DownloaderTrait for UrlDownloader {
 
         let file_extension = self.get_file_extension();
         if file_extension.is_none() {
-            eprint!("File doesn't have an extension.");
+            eprintln!("File doesn't have an extension.");
             exit(1);
         }
 

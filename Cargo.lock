@@ -393,6 +393,7 @@ checksum = "b6c80984affa11d98d1b88b66ac8853f143217b399d3c74116778ff8fdb4ed2e"
 name = "google_images_scraper-rs"
 version = "0.1.0"
 dependencies = [
+ "base64 0.21.2",
  "rand",
  "reqwest",
  "thirtyfour",
