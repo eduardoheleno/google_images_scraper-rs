@@ -27,25 +27,21 @@ impl DownloaderTrait for Base64Downloader {
             .decode(base64_image).unwrap();
 
         let file_extension = self.get_file_extension();
-        if file_extension.is_none() {
-            eprintln!("File doesn't have an extension.");
-            exit(1);
-        }
 
-        let file_name_with_extension = format!("{}{}", self.file_name, file_extension.unwrap());
+        let file_name_with_extension = format!("{}{}", self.file_name, file_extension);
         let file_path = format!("./{}/{}", self.folder_name, file_name_with_extension);
         let mut file = File::create(file_path).unwrap();
 
         file.write_all(&bytes).unwrap();
     }
 
-    fn get_file_extension(&self) -> Option<&'static str> {
+    fn get_file_extension(&self) -> &'static str {
         if self.src.contains("data:image/jpeg") || self.src.contains("data:image/jpg") {
-            return Some(".jpg");
+            return ".jpg";
         } else if self.src.contains("data:image/png") {
-            return Some(".png");
+            return ".png";
         } else {
-            return None;
+            return "";
         }
     }
 }

@@ -11,3 +11,4 @@ tokio = { version = "1.29.1", features = ["full"] }
 rand = "0.8.5"
 reqwest = { version = "0.10", features = ["blocking", "json"] }
 base64 = "0.21.2"
+dirs = "5.0.1"
