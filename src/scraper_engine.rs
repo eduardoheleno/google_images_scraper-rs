@@ -23,7 +23,7 @@ impl ScraperEngine {
         ScraperEngine { driver, url, args }
     }
 
-    pub async fn run(self) -> WebDriverResult<()> {
+    pub async fn run(&self) -> WebDriverResult<()> {
         fs::create_dir(&self.args.folder_name).unwrap();
 
         let mut counter = 0;
@@ -64,8 +64,6 @@ impl ScraperEngine {
             counter += 1;
         }
 
-        self.driver.quit().await?;
-
         Ok(())
     }
 
@@ -93,5 +91,9 @@ impl ScraperEngine {
 
         println!("{}", seconds);
         time::Duration::from_secs(seconds)
+    }
+
+    pub async fn finish_webdriver(self) {
+        self.driver.quit().await.unwrap();
     }
 }
