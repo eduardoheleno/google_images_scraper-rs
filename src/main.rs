@@ -3,6 +3,8 @@ mod scraper_engine;
 mod src_parser;
 mod downloaders;
 
+use std::thread;
+use std::fs;
 use std::process::{Command, Child, exit};
 
 use thirtyfour::prelude::*;
@@ -56,5 +58,20 @@ fn start_webdriver_process() -> Child {
         }
     };
 
+    println!("Starting webdriver process...");
+    thread::sleep(ScraperEngine::generate_duration(Some(5)));
+    println!("Webdriver process has been started successfully!");
+
     webdriver_process
 }
+
+// fn get_selenium_file_name() {
+//     let home_path = dirs::home_dir().unwrap();
+//     let selenium_path = format!("{}{}", home_path.to_str().unwrap(), WEBDRIVER_FOLDER);
+
+//     let paths = fs::read_dir(selenium_path).unwrap();
+
+//     for path in paths {
+//         println!("name: {}", path.unwrap().path().display());
+//     }
+// }

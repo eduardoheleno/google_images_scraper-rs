@@ -42,7 +42,7 @@ impl ScraperEngine {
             }
 
             element.click().await?;
-            thread::sleep(ScraperEngine::get_random_duration());
+            thread::sleep(ScraperEngine::generate_duration(None));
 
             let img_element = if let Some(img_element) = self.get_img_element().await {
                 img_element
@@ -85,8 +85,12 @@ impl ScraperEngine {
         img_element
     }
 
-    fn get_random_duration() -> time::Duration {
-        let seconds: u64 = rand::thread_rng().gen_range(3..10);
+    pub fn generate_duration(seconds: Option<u64>) -> time::Duration {
+        let seconds = match seconds {
+            Some(duration) => duration,
+            None => rand::thread_rng().gen_range(3..10)
+        };
+
         println!("{}", seconds);
         time::Duration::from_secs(seconds)
     }
