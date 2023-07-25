@@ -43,10 +43,12 @@ fn start_webdriver_process() -> Child {
     let home_path = dirs::home_dir().unwrap();
     let selenium_path = format!("{}{}", home_path.to_str().unwrap(), WEBDRIVER_FOLDER);
 
+    let selenium_file_name = get_selenium_file_name(&selenium_path);
+
     let webdriver_execution = Command::new("java")
         .arg("-jar")
         .current_dir(selenium_path)
-        .arg("selenium-server-4.10.0.jar")
+        .arg(selenium_file_name)
         .arg("standalone")
         .spawn();
 
@@ -65,13 +67,7 @@ fn start_webdriver_process() -> Child {
     webdriver_process
 }
 
-// fn get_selenium_file_name() {
-//     let home_path = dirs::home_dir().unwrap();
-//     let selenium_path = format!("{}{}", home_path.to_str().unwrap(), WEBDRIVER_FOLDER);
-
-//     let paths = fs::read_dir(selenium_path).unwrap();
-
-//     for path in paths {
-//         println!("name: {}", path.unwrap().path().display());
-//     }
-// }
+fn get_selenium_file_name(selenium_path: &String) -> String {
+    let mut paths = fs::read_dir(selenium_path).unwrap();
+    paths.nth(0).unwrap().unwrap().path().file_name().unwrap().to_string_lossy().to_string()
+}
