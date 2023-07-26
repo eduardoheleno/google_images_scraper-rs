@@ -1,7 +1,11 @@
+use std::process::Child;
 use std::{thread, time, fs};
+use std::path::Path;
 
 use rand::Rng;
 use thirtyfour::prelude::*;
+
+use crate::errors::dir_errors::DirError;
 
 use super::Args;
 use super::src_parser::SrcParser;
@@ -23,8 +27,13 @@ impl ScraperEngine {
         ScraperEngine { driver, url, args }
     }
 
-    pub async fn run(&self) -> WebDriverResult<()> {
-        fs::create_dir(&self.args.folder_name)?;
+    pub async fn run(&self, mut webdriver_process: &mut Child) -> WebDriverResult<()> {
+        match self.create_images_folder() {
+            Ok(_) => {},
+            Err(e) => {
+                DirError::default_error_handler(e, self.driver.clone(), &mut webdriver_process).await;
+            }
+        }
 
         let mut counter = 0;
         let mut download_limit = DEFAULT_DOWNLOAD_LIMIT;
@@ -68,6 +77,24 @@ impl ScraperEngine {
 
         for thread in thread_vec.into_iter() {
             thread.join().unwrap();
+        }
+
+        Ok(())
+    }
+
+    fn create_images_folder(&self) -> Result<(), DirError> {
+        let images_folder_path = format!("./{}", &self.args.folder_name);
+        let is_folder_already_created = Path::new(&images_folder_path).is_dir();
+
+        if is_folder_already_created == true {
+            return Err(DirError::FolderAlreadyExists);
+        }
+
+        match fs::create_dir(self.args.folder_name.to_string()) {
+            Ok(_) => {},
+            Err(e) => {
+                return Err(DirError::CouldntCreateFolder(e.to_string()));
+            }
         }
 
         Ok(())

@@ -38,7 +38,7 @@ async fn main() -> WebDriverResult<()> {
     let driver = start_webdriver().await.map_err(|err| WebdriverError::default_error_handler(err)).unwrap();
     let scraper_engine = ScraperEngine::new(driver, google_images_url, args);
 
-    match scraper_engine.run().await {
+    match scraper_engine.run(&mut webdriver_process).await {
         Ok(_) => {
             scraper_engine.finish_webdriver().await;
             webdriver_process.kill().unwrap();
