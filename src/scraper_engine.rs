@@ -67,7 +67,10 @@ impl ScraperEngine {
             let downloader = SrcParser::parse(src, self.args.folder_name.clone(), alt);
 
             let handle = thread::spawn(move || {
-                downloader.download();
+                match downloader.download() {
+                    Ok(_) => {},
+                    Err(e) => DirError::print_error_handler(e)
+                }
             });
 
             thread_vec.push(handle);

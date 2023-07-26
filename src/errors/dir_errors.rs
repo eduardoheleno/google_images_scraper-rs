@@ -29,4 +29,8 @@ impl DirError {
         eprintln!("{}", error);
         exit(1);
     }
+
+    pub fn print_error_handler(error: DirError) {
+        println!("{}", error);
+    }
 }

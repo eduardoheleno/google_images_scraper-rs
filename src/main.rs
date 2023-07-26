@@ -4,11 +4,13 @@ mod src_parser;
 mod downloaders;
 mod errors;
 
+use std::fs::File;
 use std::thread;
 use std::fs;
 use std::path::Path;
 use std::process::{Command, Child};
 
+use errors::dir_errors::DirError;
 use thirtyfour::prelude::*;
 
 use args::Args;
@@ -20,8 +22,9 @@ const WEBDRIVER_HOST: &str = "http://localhost:4444";
 const WEBDRIVER_FOLDER: &str = "/.google_images_scraper/";
 
 pub trait DownloaderTrait {
-    fn download(&self);
+    fn download(&self) -> Result<(), DirError>;
     fn get_file_extension(&self) -> &'static str;
+    fn create_file(&self, file_path: String) -> Result<File, DirError>;
 }
 
 #[tokio::main]
