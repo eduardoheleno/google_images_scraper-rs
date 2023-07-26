@@ -24,7 +24,7 @@ impl ScraperEngine {
     }
 
     pub async fn run(&self) -> WebDriverResult<()> {
-        fs::create_dir(&self.args.folder_name).unwrap();
+        fs::create_dir(&self.args.folder_name)?;
 
         let mut counter = 0;
         let mut download_limit = DEFAULT_DOWNLOAD_LIMIT;
@@ -36,8 +36,10 @@ impl ScraperEngine {
         self.driver.goto(&self.url).await?;
         let clickable_elements = self.driver.find_all(By::ClassName(CLICKABLE_ELEMENT)).await?;
 
+        let mut thread_vec: Vec<thread::JoinHandle<()>> = Vec::new();
+
         for element in clickable_elements {
-            if counter == download_limit {
+            if counter == download_limit + 1 {
                 break;
             }
 
@@ -59,9 +61,13 @@ impl ScraperEngine {
                 downloader.download();
             });
 
-            handle.join().unwrap();
+            thread_vec.push(handle);
 
             counter += 1;
+        }
+
+        for thread in thread_vec.into_iter() {
+            thread.join().unwrap();
         }
 
         Ok(())
@@ -89,7 +95,7 @@ impl ScraperEngine {
             None => rand::thread_rng().gen_range(3..10)
         };
 
-        println!("{}", seconds);
+        println!("Waiting {} seconds...", seconds);
         time::Duration::from_secs(seconds)
     }
 
