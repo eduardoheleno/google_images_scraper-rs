@@ -48,7 +48,7 @@ impl ScraperEngine {
         let mut thread_vec: Vec<thread::JoinHandle<()>> = Vec::new();
 
         for element in clickable_elements {
-            if counter == download_limit + 1 {
+            if counter == download_limit {
                 break;
             }
 

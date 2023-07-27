@@ -9,6 +9,9 @@ pub struct Args {
 
 impl Args {
     pub fn parse() -> Args {
+        let download_limit_arg: String = String::from("--download-limit");
+        let folder_name_arg: String = String::from("--folder-name");
+
         let vec_args: Vec<String> = env::args().collect();
 
         let search_parameter = if let Some(search_parameter) = vec_args.get(1) {
@@ -18,12 +21,20 @@ impl Args {
             exit(1);
         };
 
-        let download_limit = if let Some(download_limit) = vec_args.get(2) {
-            let download_limit_buffer = download_limit.parse::<i16>();
-            match download_limit_buffer {
+        let download_limit = if vec_args.contains(&download_limit_arg) {
+            let download_limit_arg_index = vec_args.iter().position(|arg| arg == &download_limit_arg).unwrap();
+            let download_limit_value = vec_args.get(download_limit_arg_index + 1);
+
+            if download_limit_value.is_none() {
+                eprintln!("You must insert the download limit value.");
+                exit(1);
+            }
+
+            let parse_action = download_limit_value.unwrap().parse::<i16>();
+            match parse_action {
                 Ok(parsed_download_limit) => Some(parsed_download_limit),
                 Err(_) => {
-                    eprintln!("The download limit must be a integer.");
+                    eprintln!("The download limit must be an integer.");
                     exit(1);
                 }
             }
@@ -31,11 +42,18 @@ impl Args {
             None
         };
 
-        let folder_name = if let Some(folder_name) = vec_args.get(3) {
-            folder_name.to_string()
+        let folder_name = if vec_args.contains(&folder_name_arg) {
+            let folder_name_arg_index = vec_args.iter().position(|arg| arg == &folder_name_arg).unwrap();
+            let folder_name_value = vec_args.get(folder_name_arg_index + 1);
+
+            if folder_name_value.is_none() || folder_name_value.unwrap() == &download_limit_arg {
+                eprintln!("You must insert the folder name value.");
+                exit(1);
+            }
+
+            folder_name_value.unwrap().to_string()
         } else {
-            eprintln!("You must insert a folder name.");
-            exit(1);
+            search_parameter.clone()
         };
 
         Args { search_parameter, download_limit, folder_name }
