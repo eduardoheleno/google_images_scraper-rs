@@ -5,6 +5,18 @@ The app uses a Selenium WebDriver to render the search results into a browser, t
 With that being said, the program needs a `selenium-server.jar` file stored in `.google_images_scraper` folder on `Home` directory. You can download it [**here**](https://www.selenium.dev/downloads/).<br>
 After the download, just create the `.google_images_scraper` folder on your `Home` directory and then drop the .jar file.<br>
 
+## installation
+### Linux
+To install this program you'll need Rust and Cargo installed in your machine.<br>
+You can install both [**here**](https://www.rust-lang.org/).<br>
+
+Then run:
+
+``` shell
+$ cargo install --git https://github.com/EduardoPD1921/google_images_scraper-rs
+```
+
+
 ### Usage:
 
 ```
