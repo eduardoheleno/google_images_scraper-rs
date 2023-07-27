@@ -1,9 +1,9 @@
 # google_images_scraper-rs
 
-This is a command-line app that scrapes the results of a Google Images search.
-The app uses a Selenium WebDriver to render the search results into a browser, this is necessary because the searched images are only loaded when the request is interpreted by a browser.
-With that being said, the program needs a `selenium-server.jar` file stored in `.google_images_scraper` folder on `Home` directory. You can download it [**here**](https://www.selenium.dev/downloads/).
-After the download, just create the `.google_images_scraper` folder on your `Home` directory and then drop the .jar file.
+This is a command-line app that scrapes the results of a Google Images search.<br>
+The app uses a Selenium WebDriver to render the search results into a browser, this is necessary because the searched images are only loaded when the request is interpreted by a browser.<br>
+With that being said, the program needs a `selenium-server.jar` file stored in `.google_images_scraper` folder on `Home` directory. You can download it [**here**](https://www.selenium.dev/downloads/).<br>
+After the download, just create the `.google_images_scraper` folder on your `Home` directory and then drop the .jar file.<br>
 
 ### Usage:
 
