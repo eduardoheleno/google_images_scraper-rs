@@ -29,7 +29,9 @@ impl DownloaderTrait for Base64Downloader {
         let file_extension = self.get_file_extension();
 
         let file_name_with_extension = format!("{}{}", self.file_name, file_extension);
-        let file_path = format!("./{}/{}", self.folder_name, file_name_with_extension);
+        let download_path = dirs::download_dir().unwrap();
+        let file_path = format!("{}/{}/{}", download_path.to_str().unwrap(), self.folder_name, file_name_with_extension);
+
         let mut file = match self.create_file(file_path) {
             Ok(file) => file,
             Err(e) => {

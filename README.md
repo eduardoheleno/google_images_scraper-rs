@@ -13,6 +13,10 @@ $ google_images_scraper-rs [SEARCH_PARAMETER] [OPTIONS]
 
 Args:
 - `search_parameter <string>`: (required) String that's going to be inserted on Google Images text input.
-- OPTIONS:
+- Options:
   - `--download-limit <integer>`: (optional) Limit of downloads per scraping.
   - `--folder-name <string>`: (optional) Custom folder name with downloaded images.
+  
+### Known issues
+
+Until now, the scraper has a limitation of the quantity of images that can be downloaded in a single scraping. This occurs because the browser only load 1 page of results.

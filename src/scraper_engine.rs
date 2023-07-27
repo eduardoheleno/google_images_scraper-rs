@@ -86,14 +86,15 @@ impl ScraperEngine {
     }
 
     fn create_images_folder(&self) -> Result<(), DirError> {
-        let images_folder_path = format!("./{}", &self.args.folder_name);
+        let download_path = dirs::download_dir().unwrap();
+        let images_folder_path = format!("{}/{}", download_path.to_str().unwrap(), &self.args.folder_name);
         let is_folder_already_created = Path::new(&images_folder_path).is_dir();
 
         if is_folder_already_created == true {
             return Err(DirError::FolderAlreadyExists);
         }
 
-        match fs::create_dir(self.args.folder_name.to_string()) {
+        match fs::create_dir(images_folder_path) {
             Ok(_) => {},
             Err(e) => {
                 return Err(DirError::CouldntCreateFolder(e.to_string()));
